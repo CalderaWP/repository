@@ -11,15 +11,6 @@ namespace calderawp\repository;
 abstract class Repository {
 
 	/**
-	 * Factory for creating new instances when not in repo
-	 *
-	 * @param $key
-	 *
-	 * @return mixed
-	 */
-	abstract protected function factory( $key );
-
-	/**
 	 * Stores instances
 	 *
 	 * @var array
@@ -57,7 +48,10 @@ abstract class Repository {
 	 */
 	public function get( $key )
 	{
-		return $this->getOrCreate( $key );
+		if( $this->has( $key ) ){
+			return $this->items[ $key ];
+		}
+
 	}
 
 	/**
@@ -71,22 +65,5 @@ abstract class Repository {
 		$this->items[ $key ] = $value;
 	}
 
-	/**
-	 * Get value, possibly by creating
-	 *
-	 * @param int|string $key
-	 *
-	 * @return mixed
-	 */
-	protected function getOrCreate( $key )
-	{
-		if( $this->has( $key ) ){
-			return $this->items[ $key ];
-		}
-
-		$this->items[ $key ] = $this->factory( $key );
-		return $this->items[ $key ];
-
-	}
 
 }
